@@ -1,0 +1,1 @@
+"./mcip_slave_main.obj" -l"configPkg/linker.cmd" -l"libc.a" -l"imglib.ae66" 
