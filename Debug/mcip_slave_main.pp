@@ -153,6 +153,7 @@ mcip_slave_main.obj: D:/Program/Texas/MCSDK/xdctools_3_23_04_60/packages/xdc/run
 mcip_slave_main.obj: D:/Program/Texas/MCSDK/bios_6_33_06_50/packages/ti/sysbios/interfaces/ITaskSupport.h
 mcip_slave_main.obj: D:/Program/Texas/MCSDK/bios_6_33_06_50/packages/ti/sysbios/knl/Task__epilogue.h
 mcip_slave_main.obj: D:/Program/Texas/MCSDK/bios_6_33_06_50/packages/ti/sysbios/knl/package/Task_SupportProxy.h
+mcip_slave_main.obj: ../mcip_ipc.h
 mcip_slave_main.obj: ../mcip_common.h
 mcip_slave_main.obj: D:/Program/Texas/MCSDK/ipc_1_24_03_32/packages/ti/ipc/MessageQ.h
 
@@ -309,5 +310,6 @@ D:/Program/Texas/MCSDK/xdctools_3_23_04_60/packages/xdc/runtime/Types.h:
 D:/Program/Texas/MCSDK/bios_6_33_06_50/packages/ti/sysbios/interfaces/ITaskSupport.h: 
 D:/Program/Texas/MCSDK/bios_6_33_06_50/packages/ti/sysbios/knl/Task__epilogue.h: 
 D:/Program/Texas/MCSDK/bios_6_33_06_50/packages/ti/sysbios/knl/package/Task_SupportProxy.h: 
+../mcip_ipc.h: 
 ../mcip_common.h: 
 D:/Program/Texas/MCSDK/ipc_1_24_03_32/packages/ti/ipc/MessageQ.h: 

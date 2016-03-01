@@ -10,6 +10,7 @@ GEN_OPTS__FLAG := --cmd_file="configPkg/compiler.opt"
 GEN_CMDS__FLAG := -l"configPkg/linker.cmd"
 
 ORDERED_OBJS += \
+"./mcip_imgproc.obj" \
 "./mcip_slave_main.obj" \
 $(GEN_CMDS__FLAG) \
 -l"libc.a" \
@@ -150,8 +151,8 @@ mcip_slave.hex: $(EXE_OUTPUTS)
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)$(GEN_FILES__QUOTED)$(BIN_OUTPUTS__QUOTED)$(GEN_OPTS__QUOTED)$(GEN_CMDS__QUOTED)
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
-	-$(RM) "mcip_slave_main.pp" 
-	-$(RM) "mcip_slave_main.obj" 
+	-$(RM) "mcip_imgproc.pp" "mcip_slave_main.pp" 
+	-$(RM) "mcip_imgproc.obj" "mcip_slave_main.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

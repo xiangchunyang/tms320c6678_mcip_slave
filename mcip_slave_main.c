@@ -8,13 +8,12 @@
 #include <ti/ipc/MultiProc.h>
 #include <ti/sysbios/knl/Task.h>
 
+#include "mcip_ipc.h"
 #include "mcip_common.h"
 
 int coreId = 0;
 
 void SlaveDaemon(void);
-
-void SlaveN_Task(proc_msg_t* pMsg);
 
 int main()
 {
@@ -56,37 +55,13 @@ void SlaveDaemon(void)
 	{
 		MessageQ_get(hSlaveQueue, (MessageQ_MsgHeader**)&pMsg, MessageQ_FOREVER);
 
-		SlaveN_Task(pMsg);
+		image_proc(pMsg,coreId,NUM_OF_CORES);
 
 		MessageQ_open(MASTER_MSGQ_NAME,&queueId);
         MessageQ_put(queueId, (MessageQ_MsgHeader*)pMsg);
 	}
 
     MessageQ_delete(&hSlaveQueue);
-}
-
-void SlaveN_Task(proc_msg_t* pMsg)
-{
-	int width = pMsg->info.width;
-	int height = pMsg->info.height;
-
-	int hx = height/NUM_OF_CORES;
-
-	int h0 = height - hx*(NUM_OF_CORES-coreId);
-	int h1 = h0+hx;
-
-	byte* src = pMsg->memr.recvBuf;
-	byte* dst = pMsg->memr.sendBuf;
-
-	int i,v;
-	int k0 = h0*width;
-	int k1 = h1*width;
-
-	for(i=k0;i<k1;++i)
-	{
-		v=src[i]+64;
-		dst[i]=v>255?(byte)255:(byte)v;
-	}
 }
 
 // EOF

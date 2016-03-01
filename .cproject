@@ -25,13 +25,13 @@
 								<listOptionValue builtIn="false" value="RUNTIME_SUPPORT_LIBRARY=libc.a"/>
 								<listOptionValue builtIn="false" value="RTSC_MBS_VERSION=2.2.0"/>
 								<listOptionValue builtIn="false" value="XDC_VERSION=3.23.4.60"/>
-								<listOptionValue builtIn="false" value="RTSC_PRODUCTS=ti.imglib.c66x:3.1.1.0;com.ti.rtsc.IPC:1.24.3.32;com.ti.biosmcsdk.mcsdk:2.1.2.6;com.ti.biosmcsdk.pdk.C6678L:1.1.2.6;com.ti.rtsc.SYSBIOS:6.33.6.50;com.ti.uia:2.0.3.43;"/>
+								<listOptionValue builtIn="false" value="RTSC_PRODUCTS=ti.imglib.c66x:3.1.1.0;com.ti.rtsc.IPC:1.24.3.32;com.ti.biosmcsdk.mcsdk:2.1.2.6;com.ti.biosmcsdk.pdk.C6678L:1.1.2.6;com.ti.rtsc.SYSBIOS:6.33.6.50;com.ti.uia:2.0.5.50;"/>
 								<listOptionValue builtIn="false" value="INACTIVE_REPOS="/>
 								<listOptionValue builtIn="false" value="OUTPUT_TYPE=executable"/>
 							</option>
 							<option id="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION.1354642903" name="Compiler version" superClass="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION" value="8.0.0" valueType="string"/>
 							<targetPlatform id="com.ti.ccstudio.buildDefinitions.C6000_8.0.exe.targetPlatformDebug.774148253" name="Platform" superClass="com.ti.ccstudio.buildDefinitions.C6000_8.0.exe.targetPlatformDebug"/>
-							<builder buildPath="${BuildDirectory}" id="com.ti.ccstudio.buildDefinitions.C6000_8.0.exe.builderDebug.1685003538" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="GNU Make" stopOnErr="true" superClass="com.ti.ccstudio.buildDefinitions.C6000_8.0.exe.builderDebug"/>
+							<builder buildPath="${BuildDirectory}" id="com.ti.ccstudio.buildDefinitions.C6000_8.0.exe.builderDebug.1685003538" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="GNU Make" stopOnErr="true" superClass="com.ti.ccstudio.buildDefinitions.C6000_8.0.exe.builderDebug"/>
 							<tool id="com.ti.ccstudio.buildDefinitions.C6000_8.0.exe.compilerDebug.1006304423" name="C6000 Compiler" superClass="com.ti.ccstudio.buildDefinitions.C6000_8.0.exe.compilerDebug">
 								<option id="com.ti.ccstudio.buildDefinitions.C6000_8.0.compilerID.SILICON_VERSION.535582008" name="Target processor version (--silicon_version, -mv)" superClass="com.ti.ccstudio.buildDefinitions.C6000_8.0.compilerID.SILICON_VERSION" value="6600" valueType="string"/>
 								<option id="com.ti.ccstudio.buildDefinitions.C6000_8.0.compilerID.ABI.281207786" name="Application binary interface (coffabi not supported) [See 'General' page to edit] (--abi)" superClass="com.ti.ccstudio.buildDefinitions.C6000_8.0.compilerID.ABI" value="com.ti.ccstudio.buildDefinitions.C6000_8.0.compilerID.ABI.eabi" valueType="enumerated"/>
