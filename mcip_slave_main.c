@@ -55,7 +55,7 @@ void SlaveDaemon(void)
 	{
 		MessageQ_get(hSlaveQueue, (MessageQ_MsgHeader**)&pMsg, MessageQ_FOREVER);
 
-		image_proc(pMsg,coreId,NUM_OF_CORES);
+		ImageNegative(pMsg,coreId,NUM_OF_CORES);
 
 		MessageQ_open(MASTER_MSGQ_NAME,&queueId);
         MessageQ_put(queueId, (MessageQ_MsgHeader*)pMsg);
