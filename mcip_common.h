@@ -37,20 +37,41 @@ typedef struct s_img_info_t
 //       |             |          |             |
 //       +-------------+          +-------------+
 
-typedef struct s_memr_ptr_t
-{
-	byte*  recvBuf;
-	byte*  sendBuf;
-}memr_ptr_t;
-
 typedef struct s_proc_msg_t
 {
     MessageQ_MsgHeader header;
-    img_info_t         info;
-    memr_ptr_t         memr;
+    img_info_t         imgInfo;
+    byte*              imgSrc;
+    byte*              imgDst;
 } proc_msg_t;
 
-void ImageNegative(proc_msg_t* pMsg, int coreId, int numCores);
+typedef struct QNode
+{
+	int data;
+	struct QNode *next;
+}QNode;
+
+// а╢й╫╤сап
+typedef struct Queue
+{
+	struct QNode* first;
+	struct QNode* last;
+}Queue;
+
+int DeQueue(Queue *Q);
+
+void EnQueue(Queue *Q, int data);
+
+void SearchNeighbor(short* map, byte *img, int width, int height, short L, int S, Queue *Q);
+
+// CC = ConnectedComponent
+int CCLabeling(short* map, byte *img, int width, int height);
+
+void CCAreaThresholding(short* map,int size,int n,int min,int max);
+
+void ReMapping(byte* dst,short* src,int size);
+
+void ImageBW(byte* dst, byte* src,int width,int height);
 
 void CalcHist(int* hist, byte* imgData, int imgSize);
 
@@ -105,5 +126,7 @@ void GradientFilter(byte* img, byte* grad, int width, int height, byte thresh, i
 void GradientFilter2(byte* img, byte* grad, int imgSize);
 
 int FindBestThresh(int* smooth_hist, int serach_window);
+
+void ObjectDetection(byte* dst,byte* src,int width,int height);
 
 #endif /* MCIP_COMMON_H_ */

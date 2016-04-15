@@ -6,34 +6,208 @@ const int NGRAY = 256;
 const byte b0 = (byte)0;
 const byte bx = (byte)255;
 
-void ImageNegative(proc_msg_t* pMsg, int coreId, int numCores)
+//°ËÁÚÓò
+static int OD[8][2] = {{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1},{-1,0},{-1,1}};
+
+void ObjectDetection(byte* dst,byte* src,int width,int height)
 {
-	//
-	byte* src = pMsg->memr.recvBuf;
-	byte* dst = pMsg->memr.sendBuf;
+	ImageBW(dst,src,width,height);
+	ImageClose(dst,width,height,3,3);
+	int size=width*height;
+	int min=10,max=300; //!!!!!!!!!
+	short* map = (short*)malloc(size*sizeof(short));
+	int n = CCLabeling(map,dst,width,height);
+	CCAreaThresholding(map,size,n,min,max);
+	ReMapping(dst,map,size);
+	free(map);
+}
 
-	int width  = pMsg->info.width;
-	int height = pMsg->info.height;
+void CCAreaThresholding(short* map,int size,int n,int min,int max)
+{
+	int M=(n+1)*sizeof(int);
+	int* areas = (int*)malloc(M);
+	memset(areas,0,M);
 
-	int hx = height/numCores;
-
-	int h0 = hx*coreId;
-	int h1 = h0 + hx;
-
-	if(coreId == numCores-1)
+	int i,L;
+	for(i=0;i<size;++i)
 	{
-		h1 = height;
+		L = map[i];
+		if(L)
+		{
+			++areas[L];
+		}
 	}
 
-	int i;
-	int k0 = h0*width;
-	int k1 = h1*width;
+	int cnt = 0;
 
-	for(i=k0;i<k1;++i)
+	for(i=1;i<=n;++i)
 	{
-		dst[i] = (byte)(255 - src[i]);
+		if(areas[i]<min||areas[i]>max)
+		{
+			areas[i]=0;
+			++cnt;
+		}
+	}
+
+	for(i=0;i<size;++i)
+	{
+		if(areas[map[i]]==0)
+		{
+			map[i]=0;
+		}
+	}
+
+	free(areas);
+}
+
+// CC = ConnectedComponent
+int CCLabeling(short* map, byte *img, int width, int height)
+{
+	Queue* Q = (Queue*)malloc(sizeof(Queue));
+	Q->first = NULL;
+	Q->last  = NULL;
+
+	memset(map, 0, width * height*sizeof(short));
+
+	int r, c, k, S;
+	short L = 0;
+	for(r = 1; r < height - 1; ++r)
+	{
+		for(c = 1; c < width - 1; ++c)
+		{
+			k = r * width + c;
+			if(img[k] == bx && map[k] == (short)0)
+			{
+				++L;
+				SearchNeighbor(map, img, width, height, L, k, Q);
+				S = DeQueue(Q);
+				while(S > -1)
+				{
+					SearchNeighbor(map, img, width, height, L, S, Q);
+					S = DeQueue(Q);
+				}
+			}
+		}
+	}
+
+	free(Q);
+
+	return L;
+}
+
+void SearchNeighbor(short* map, byte *img, int width, int height, short L, int S, Queue *Q)
+{
+	map[S] = L;
+	int i,k,N = width * height;
+	for(i = 0; i < 8; ++i)
+	{
+		k = S + OD[i][0] * width + OD[i][1];
+		if(k > 0 && k < N && img[k] == bx && map[k] == (short)0)
+		{
+			map[k] = L;
+			EnQueue(Q, k);
+		}
 	}
 }
+
+int DeQueue(Queue *Q)
+{
+	QNode *p = Q->first;
+	if(p == NULL)
+	{
+		return -1;
+	}
+
+	int data = p->data;
+
+	if(p->next == NULL)
+	{
+		Q->first = NULL;
+		Q->last  = NULL;
+	}
+	else
+	{
+		Q->first = p->next;
+	}
+
+	free(p);
+	return data;
+}
+
+void EnQueue(Queue *Q, int data)
+{
+	QNode *p = (QNode*)malloc(sizeof(QNode));
+	p->data = data;
+
+	if(Q->first == NULL)
+	{
+		Q->first = p;
+		Q->last  = p;
+		p->next = NULL;
+	}
+	else
+	{
+		p->next = NULL;
+		Q->last->next = p;
+		Q->last = p;
+	}
+}
+
+void ReMapping(byte* dst,short* src,int size)
+{
+	short min=src[0];
+	short max=src[0];
+
+	int i;
+	for(i=1;i<size;++i)
+	{
+		if(src[i]>max) max=src[i];
+		else if(src[i]<min) min=src[i];
+		else continue;
+	}
+
+	float f = 255.0f/(max-min);
+
+	for(i=0;i<size;++i)
+	{
+		dst[i]=(byte)((src[i]-min)*f);
+	}
+}
+
+void ImageBW(byte* dst, byte* src,int width,int height)
+{
+	int size = width*height;
+	byte thresh = 32;
+	int window = 3;
+
+	byte* grad=(byte*)malloc(size);
+
+	CalcGradient(grad, src, width, height);
+	GradientFilter2(src, grad, size);
+
+	free(grad);
+
+	int* hist = (int*)malloc(sizeof(int)*NGRAY);
+	int* hist_s = (int*)malloc(sizeof(int)*NGRAY);
+
+	CalcHist(hist, src, size);
+
+	HistSmoothing(hist_s, hist, window);
+
+	free(hist);
+
+	thresh = (byte)FindBestThresh(hist_s, window);
+
+	free(hist_s);
+
+	ImageThresholding(dst, src, size, thresh);
+}
+
+// calc gradient
+// gradient filtering
+// calc histgram
+// histgram smoothing
+// find best threshold
 
 void CalcHist(int* hist, byte* imgData, int imgSize)
 {
